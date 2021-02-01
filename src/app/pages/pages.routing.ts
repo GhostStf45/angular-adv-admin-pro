@@ -2,24 +2,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 import { PagesComponent } from './pages.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { Grafica1Component } from './grafica1/grafica1.component';
-import { ProgressComponent } from './progress/progress.component';
-import { AccountSettingsComponent } from './account-settings/account-settings.component';
-import { PromesasComponent } from './promesas/promesas.component';
-import { RxjsComponent } from './rxjs/rxjs.component';
 import { AuthGuard } from '../guards/auth.guard';
-import { PerfilComponent } from './perfil/perfil.component';
-
-
-
-// Mantenimientos 
-import { UsuariosComponent } from './mantenimientos/usuarios/usuarios.component';
-import { HospitalesComponent } from './mantenimientos/hospitales/hospitales.component';
-import { MedicosComponent } from './mantenimientos/medicos/medicos.component';
-import { MedicoComponent } from './mantenimientos/medicos/medico.component';
-import { BusquedaComponent } from './busqueda/busqueda.component';
-import { AdminGuard } from '../guards/admin.guard';
 
 
 
@@ -29,26 +12,9 @@ const routes: Routes = [
     path: 'dashboard',
     component: PagesComponent,
     canActivate: [ AuthGuard ],
-    //rutas hijas
-    children:[
-      {path: '', component: DashboardComponent, data: {titulo: 'Dashboard'}},
-      {path: 'account-settings', component: AccountSettingsComponent, data: {titulo: 'Ajustes de cuenta'}},
-      {path: 'buscar/:termino', component: BusquedaComponent, data: {titulo: 'Busqueda'}},
-      {path: 'grafica1', component: Grafica1Component, data: {titulo: 'Grafica'}},
-      {path: 'progress', component: ProgressComponent, data: {titulo: 'ProgressBar'}},
-      {path: 'promesas', component: PromesasComponent, data: {titulo: 'Promesas'}},
-      {path: 'perfil', component: PerfilComponent, data: {titulo: 'Perfil de usuario'}},
-      {path: 'rxjs', component: RxjsComponent, data: {titulo: 'RxJs'}},
-
-      // Mantenimientos
-      // RUTAS ADMIN
-      {path: 'usuarios', canActivate:[AdminGuard], component: UsuariosComponent, data: {titulo: 'Mantenimiento de usuarios'}},
-      
-      // RUTAS USUARIO
-      {path: 'hospitales', component: HospitalesComponent, data: {titulo: 'Mantenimiento de hospitales'}},
-      {path: 'medicos', component: MedicosComponent, data: {titulo: 'Mantenimiento de medicos'}},
-      {path: 'medico/:id', component: MedicoComponent, data: {titulo: 'Mantenimiento de medico'}}
-    ]
+    canLoad: [ AuthGuard], //Necesita para cargar todas las paginas hijas con Lazyload antes de hacer otra accion
+    //rutas hijas [LAZYLOAD]
+    loadChildren: () => import('./child-routes.module').then ( m => m.ChildRoutesModule)
   },
 ];
 
